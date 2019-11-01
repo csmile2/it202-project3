@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <!-- Due 11/15 -->
+    <!-- Due 11/15 
+        - Will need some global variables:
+            player = {x: 100, y:100}
+            harm = {}
+            benefit = {}
+            game = {score: 0, lives: 3}
+            - start the animation-loop as a function
+            Clearing the canvas, then repainting it
+            Update data: e.g. decreasing the y-coordinate
+        - handle edge condition:
+            > if y is greater than the edge of the screen, reset the y-coord
+            > handle collision condition
+                - 2d collision detection in html canvas
+                    https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+                - subtract a life or add points: end game if out of lives
+        - Draw the objects back onto the screen
+        - Moving the player charcter:
+            - press the arrow keys: key press event handler:
+                                        - update the players coordinate -> right = add 1 to x, left = subtract 1
+                                        - doesn't REDRAW the character, just alters the coordinates
+        
+    -->
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
