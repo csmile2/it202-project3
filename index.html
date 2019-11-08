@@ -47,10 +47,12 @@
             canvas : function(){
                 c = document.createElement("canvas");
                 c.setAttribute("id","canvas");
+                c.setAttribute("width","480");
+                c.setAttribute("height","270");
             },
             start : function() {
-                c.width = 480;
-                c.height = 270;
+                // c.width = 480;
+                // c.height = 270;
                 this.context = this.c.getContext("2d");
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
                 var c = document.getElementById("canvas");
