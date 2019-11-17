@@ -36,19 +36,35 @@ canvas {
 <script>
 
 var myGamePiece;
+var gameScore = 0;
+
+function updateScore(){
+    gameScore = gameScore + 1;
+    ctx.font = "24 Comic Sans";
+    ctx.fillStyle = "blue";
+    ctx.fillText(gameScore, 420, 10);
+}
 
 function startGame() {
     myGameArea.start();
     myGamePiece = new component(30, 30, "red", 240, 235);
-    setInterval(objects.start(), 20);
+    objects.start();
+    setInterval(updateScore(), 100);
 }
 
 var objects = {
     dropHearts : function() {
-        console.log("dropping a heart");
         randomX = Math.floor(Math.random() * Math.floor(480));
         heart = new component(30, 30, "purple", randomX, 5);
         heart.update();
+
+        setInterval(function(){ 
+            console.log("dropping a heart");
+            randomX = Math.floor(Math.random() * Math.floor(460));
+            heart = new component(30, 30, "purple", randomX, 5);
+            heart.update();
+        }, 950);
+
     },
     start : function(){
         var intervalID = setInterval(this.dropHearts(), 1);
