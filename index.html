@@ -39,9 +39,8 @@ var myGamePiece;
 
 function startGame() {
     myGameArea.start();
-
     myGamePiece = new component(30, 30, "red", 240, 235);
-    objects.start();
+    setInterval(objects.start(), 20);
 }
 
 var objects = {
@@ -52,10 +51,8 @@ var objects = {
         heart.update();
     },
     start : function(){
+        var intervalID = setInterval(this.dropHearts(), 1);
         this.dropHearts();
-        var intervalID = window.setInterval(this.dropHearts(), 500);
-        // window.setInterval(objects.dropHearts(), 500);
-        // this.dropHearts();
     }
 }
 
@@ -90,10 +87,7 @@ function component(width, height, color, x, y) {
     this.update = function() {
         ctx = myGameArea.context;
         ctx.fillStyle = color;
-        // console.log(this.x);
         ctx.fillRect(this.x, this.y, this.width, this.height);
-        // if(this.x > 0 && this.x < 480){
-        // }
     }
     this.newPos = function() {
         this.x += this.speedX;
@@ -112,12 +106,14 @@ function updateGameArea() {
         if (myGameArea.key && myGameArea.key == 39) {myGamePiece.speedX = 5; }  
         myGamePiece.newPos();
         myGamePiece.update();
+        heart.y = heart.y + 5;
         heart.update();
     }else{
         myGameArea.clear();
         if(myGamePiece.x < 5) {myGamePiece.x = 5;}
         if(myGamePiece.x >= 445) {myGamePiece.x = 445;}
         myGamePiece.update();
+        heart.y = heart.y + 5;
         heart.update();
     }
 
