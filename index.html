@@ -1,75 +1,128 @@
 <!DOCTYPE html>
-<html>
-    <!-- Due 11/15 
-        - Will need some global variables:
-            player = {x: 100, y:100}
-            harm = {}
-            benefit = {}
-            game = {score: 0, lives: 3}
-            - start the animation-loop as a function
-            Clearing the canvas, then repainting it
-            Update data: e.g. decreasing the y-coordinate
-        - handle edge condition:
-            > if y is greater than the edge of the screen, reset the y-coord
-            > handle collision condition
-                - 2d collision detection in html canvas
-                    https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-                - subtract a life or add points: end game if out of lives
-        - Draw the objects back onto the screen
-        - Moving the player charcter:
-            - press the arrow keys: key press event handler:
-                                        - update the players coordinate -> right = add 1 to x, left = subtract 1
-                                        - doesn't REDRAW the character, just alters the coordinates
-        
-    -->
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-            crossorigin="anonymous">
-        <style>
-        canvas {
-            border: 1px solid #d3d3d3;
-            background-color: #f1f1f1;
-        }
-        </style>
-    </head>
-
-    <body onload="startGame()">
-
-    </body>
+<!-- Due 11/15 
+    - Will need some global variables:
+    player = {x: 100, y:100}
+    harm = {}
+    benefit = {}
+    game = {score: 0, lives: 3}
+    - start the animation-loop as a function
+    Clearing the canvas, then repainting it
+    Update data: e.g. decreasing the y-coordinate
+    - handle edge condition:
+    > if y is greater than the edge of the screen, reset the y-coord
+    > handle collision condition
+    - 2d collision detection in html canvas
+    https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+    - subtract a life or add points: end game if out of lives
+    - Draw the objects back onto the screen
+    - Moving the player charcter:
+    - press the arrow keys: key press event handler:
+    - update the players coordinate -> right = add 1 to x, left = subtract 1
+    - doesn't REDRAW the character, just alters the coordinates
     
-    <script>
-        function startGame() {
-            myGameArea.canvas();
-            myGameArea.start();
-        }
-        var myGameArea = {
-            canvas : function(){
-                c = document.createElement("canvas");
-                c.setAttribute("id","canvas");
-                c.setAttribute("width","480");
-                c.setAttribute("height","270");
-            },
-            start : function() {
-                // c.width = 480;
-                // c.height = 270;
-                // this.context = this.c.getContext("2d");
-                // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-                var c = document.getElementById("canvas");
-                var ctx = c.getContext("2d");
-                ctx.beginPath();
-                ctx.arc(100, 75, 50, 0, 2 * Math.PI);
-                ctx.stroke();
-            }
-        }
-        function updatePositions(){
-            // clear
-            // update positions
-            // handle collisions
-            // draw objects
-            // call animation Fx
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
+</style>
+</head>
+<body onload="startGame()">
+<script>
 
-        }
-    </script>
+var myGamePiece;
 
+function startGame() {
+    myGameArea.start();
+
+    myGamePiece = new component(30, 30, "red", 240, 235);
+    objects.start();
+}
+
+var objects = {
+    dropHearts : function() {
+        console.log("dropping a heart");
+        randomX = Math.floor(Math.random() * Math.floor(480));
+        heart = new component(30, 30, "purple", randomX, 5);
+        heart.update();
+    },
+    start : function(){
+        this.dropHearts();
+        var intervalID = window.setInterval(this.dropHearts(), 500);
+        // window.setInterval(objects.dropHearts(), 500);
+        // this.dropHearts();
+    }
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 480;
+        this.canvas.height = 270;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.interval = setInterval(updateGameArea, 20);
+        window.addEventListener('keydown', function (e) {
+            myGameArea.key = e.keyCode;
+        })
+        window.addEventListener('keyup', function (e) {
+            myGameArea.key = false;
+        })
+    }, 
+    clear : function(){
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+function component(width, height, color, x, y) {
+    this.gamearea = myGameArea;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;    
+    this.update = function() {
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        // console.log(this.x);
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        // if(this.x > 0 && this.x < 480){
+        // }
+    }
+    this.newPos = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;        
+    }
+}
+
+
+
+function updateGameArea() {
+    if(myGamePiece.x > 0 && myGamePiece.x < 450){
+        myGameArea.clear();
+        myGamePiece.speedX = 0;
+        myGamePiece.speedY = 0;  
+        if (myGameArea.key && myGameArea.key == 37) {myGamePiece.speedX = -5;}
+        if (myGameArea.key && myGameArea.key == 39) {myGamePiece.speedX = 5; }  
+        myGamePiece.newPos();
+        myGamePiece.update();
+        heart.update();
+    }else{
+        myGameArea.clear();
+        if(myGamePiece.x < 5) {myGamePiece.x = 5;}
+        if(myGamePiece.x >= 445) {myGamePiece.x = 445;}
+        myGamePiece.update();
+        heart.update();
+    }
+
+}
+</script>
+<p>Make sure this window has focus, then you can use the arrow keys on you keyboard to move the red square.</p>
+</body>
 </html>
