@@ -38,9 +38,8 @@ canvas {
 var myGamePiece;
 var gameScore = 0;
 
-function updateScore(){
-    gameScore = gameScore + 1;
-    ctx.font = "24 Comic Sans";
+function updateScore(gameScore){
+    ctx.font = "28 Comic Sans";
     ctx.fillStyle = "blue";
     ctx.fillText(gameScore, 420, 10);
 }
@@ -114,6 +113,9 @@ function component(width, height, color, x, y) {
 
 
 function updateGameArea() {
+    gameScore += 1;
+    // console.log("updating score");
+
     if(myGamePiece.x > 0 && myGamePiece.x < 450){
         myGameArea.clear();
         myGamePiece.speedX = 0;
@@ -124,6 +126,7 @@ function updateGameArea() {
         myGamePiece.update();
         heart.y = heart.y + 5;
         heart.update();
+        updateScore(gameScore);
     }else{
         myGameArea.clear();
         if(myGamePiece.x < 5) {myGamePiece.x = 5;}
@@ -131,6 +134,7 @@ function updateGameArea() {
         myGamePiece.update();
         heart.y = heart.y + 5;
         heart.update();
+        updateScore(gameScore);
     }
 
 }
